@@ -1,0 +1,19 @@
+name: My First Pipeline
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  test-secret:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check secret is available
+        env:
+          MY_API_KEY: ${{ secrets.MY_API_KEY }}
+        run: |
+          if [ -n "$MY_API_KEY" ]; then
+            echo "Secret is set ✅"
+          else
+            echo "Secret is missing ❌"
+          fi
