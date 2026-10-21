@@ -1,0 +1,34 @@
+name: Secure CI Pipeline
+
+on:
+  push:
+    branches: [main]
+
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  security-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Verify Secret Configuration
+        env:
+          DEMO_API_KEY: ${{ secrets.DEMO_API_KEY }}
+        run: |
+          if [ -z "$DEMO_API_KEY" ]; then
+            echo "Secret is missing"
+            exit 1
+          else
+            echo "Secret is configured"
+          fi
+
+      - name: Run Basic Test
+        run: |
+          echo "CI pipeline executed successfully"
